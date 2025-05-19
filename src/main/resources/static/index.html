@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Demo Temporal Banking</title>
+</head>
+<body>
+  <h1>Demo Temporal Banking</h1>
+  <h2>Pago simple</h2>
+  Cuenta: <input id="payAcct" value="123"><br>
+  Monto: <input id="payAmt" type="number" value="100"><br>
+  <button onclick="callAPI('/api/payment', { accountId: payAcct.value, amount: +payAmt.value })">
+    Ejecutar Payment
+  </button>
+  <pre id="payRes"></pre>
+  <h2>Transacción</h2>
+  Desde: <input id="txFrom" value="123"><br>
+  Hacia: <input id="txTo" value="456"><br>
+  Monto: <input id="txAmt" type="number" value="50"><br>
+  <button onclick="callAPI('/api/transaction', { fromAccount: txFrom.value, toAccount: txTo.value, amount: +txAmt.value })">
+    Ejecutar Transaction
+  </button>
+  <pre id="txRes"></pre>
+  <h2>Orquestación</h2>
+  Desde: <input id="orcFrom" value="123"><br>
+  Hacia: <input id="orcTo" value="456"><br>
+  Monto: <input id="orcAmt" type="number" value="75"><br>
+  <button onclick="callAPI('/api/orchestrate', { fromAccount: orcFrom.value, toAccount: orcTo.value, amount: +orcAmt.value })">
+    Ejecutar Orchestration
+  </button>
+  <pre id="orcRes"></pre>
+  <script>
+    async function callAPI(path, body) {
+      const res = await fetch(path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const text = await res.text();
+      document.getElementById(path.includes('payment') ? 'payRes' :
+                             path.includes('transaction') ? 'txRes' : 'orcRes')
+               .textContent = text;
+    }
+  </script>
+</body>
+</html>
